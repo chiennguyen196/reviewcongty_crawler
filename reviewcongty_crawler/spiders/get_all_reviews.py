@@ -2,6 +2,7 @@
 import scrapy
 import re
 from utils import get_time
+from items import Company, Review
 
 
 class GetAllReviewsSpider(scrapy.Spider):
@@ -41,18 +42,17 @@ class GetAllReviewsSpider(scrapy.Spider):
         comapny_type = "".join(company_selector.css('div.company-info__other span')[0].css('::text').getall()).strip()
         size = "".join(company_selector.css('div.company-info__other span')[2].css('::text').getall()).strip()
         address = "".join(company_selector.css('div.company-info__location span::text').getall()).strip().replace('\n', ' ')
-        return {
-            "image_logo": image_logo,
-            "name": name,
-            "url": url,
-            "slug": slug,
-            "rating": rating,
-            "rating_count": rating_count,
-            "type": comapny_type,
-            "size": size,
-            "address": address
-        }
-
+        return Company(
+            image_logo=image_logo,
+            name=name,
+            url=url,
+            slug=slug,
+            rating=rating,
+            rating_count=rating_count,
+            company_type=comapny_type,
+            size=size,
+            address=address,
+        )
 
     def parse_rating(self, rating_selector):
         rating_elements = rating_selector.get()
@@ -95,18 +95,19 @@ class GetAllReviewsSpider(scrapy.Spider):
         for reply_selector in selector.xpath('./div[@class="review-comments"]/div[@class="comment"]'):
             reply = self.get_reply(reply_selector)
             replies.append(reply)
+
+        return Review(
+            name=name,
+            position=position,
+            rating=rating,
+            created=created,
+            content=content,
+            num_likes=num_likes,
+            num_dislikes=num_dislikes,
+            num_delete_requests=num_delete_requests,
+            replies=replies,
+        )
         
-        return {
-            "name": name,
-            "position": position,
-            "rating": rating,
-            "created": created,
-            "content": content,
-            "num_likes": num_likes,
-            "num_dislikes": num_dislikes,
-            "num_delete_requests": num_delete_requests,
-            "replies": replies
-        }
     
     def get_reply(self, reply_selector):
         created = "".join(reply_selector.xpath('./p[@class="comment__title"]/text()').getall()).strip()

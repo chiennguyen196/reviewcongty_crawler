@@ -15,4 +15,23 @@ class ReviewcongtyCrawlerItem(scrapy.Item):
 
 
 class Company(scrapy.Item):
-    
+    image_logo = scrapy.Field()
+    name = scrapy.Field()
+    url = scrapy.Field()
+    slug = scrapy.Field()
+    rating = scrapy.Field()
+    rating_count = scrapy.Field()
+    company_type = scrapy.Field()
+    size = scrapy.Field()
+    address = scrapy.Field()
+
+class Review(scrapy.Item):
+    name = scrapy.Field()
+    position = scrapy.Field()
+    rating = scrapy.Field()
+    created = scrapy.Field(serializer=str)
+    content = scrapy.Field()
+    num_likes = scrapy.Field()
+    num_dislikes = scrapy.Field()
+    num_delete_requests = scrapy.Field()
+    replies = scrapy.Field()
