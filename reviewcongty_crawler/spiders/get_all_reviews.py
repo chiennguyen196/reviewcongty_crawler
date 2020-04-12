@@ -112,7 +112,7 @@ class GetAllReviewsSpider(scrapy.Spider):
     def get_reply(self, reply_selector):
         created = "".join(reply_selector.xpath('./p[@class="comment__title"]/text()').getall()).strip()
         created = get_time(created)
-        name = reply_selector.xpath('./p[@class="comment__title"]/span/text()').get().replace("đề nghị xóa", "").replace("đã", "").strip()
+        name = reply_selector.xpath('./p[@class="comment__title"]/span/text()').get().replace("đề nghị xóa", "").replace("đã", "").replace("❌", "").strip()
         content = reply_selector.xpath('./p[@class="comment__content text-500"]/text()').get()
         return {
             "name": name,

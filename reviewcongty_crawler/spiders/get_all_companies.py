@@ -39,7 +39,7 @@ class GetAllCompaniesSpider(scrapy.Spider):
             "slug": slug,
             "rating": rating,
             "rating_count": rating_count,
-            "type": comapny_type,
+            "comapny_type": comapny_type,
             "size": size,
             "address": address
         }
