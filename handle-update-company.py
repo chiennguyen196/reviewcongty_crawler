@@ -9,11 +9,12 @@ import datetime
 import logging
 logging.basicConfig(level = logging.INFO)
 
-DATABASE = "reviewcongty"
-COMPANY_COLECTION = "company"
-REVIEW_COLECTION = "review"
-BASE_URL = "https://reviewcongty.com/"
-IMAGE_DEST_FOLDER = "/home/teko/Desktop"
+# config in config.sh
+DATABASE = os.environ['DATABASE']
+COMPANY_COLECTION = os.environ['COMPANY_COLECTION']
+REVIEW_COLECTION = os.environ['REVIEW_COLECTION']
+BASE_URL = os.environ['BASE_URL']
+IMAGE_DEST_FOLDER = os.environ['IMAGE_DEST_FOLDER']
 
 class UpdateCompany:
     def __init__(self):

@@ -2,14 +2,14 @@
 set -e
 
 . ./path.sh
+. ./config.sh
 
 # Make temp folder
 TEMP_FOLDER=$(mktemp -d)
 
-MAX_PAGES=5
-
 COMPANIES_JL=${TEMP_FOLDER}/companies.jl
 
+# MAX_PAGE get from config.sh
 scrapy crawl get-all-companies -a n_pages=${MAX_PAGES} -o $COMPANIES_JL -t "jl" 
 
 while IFS= read -r line

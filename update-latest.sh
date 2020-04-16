@@ -6,6 +6,7 @@
 set -e
 
 . ./path.sh
+. ./config.sh
 
 # Make temp folder
 TEMP_FOLDER=$(mktemp -d)
