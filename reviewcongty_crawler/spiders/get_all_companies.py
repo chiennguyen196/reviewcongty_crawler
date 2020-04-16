@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
+import urllib.parse
 
 
 class GetAllCompaniesSpider(scrapy.Spider):
@@ -35,7 +36,7 @@ class GetAllCompaniesSpider(scrapy.Spider):
         return {
             "image_logo": image_logo,
             "name": name,
-            "url": url,
+            "url": urllib.parse.urljoin('https://reviewcongty.com/', url),
             "slug": slug,
             "rating": rating,
             "rating_count": rating_count,
