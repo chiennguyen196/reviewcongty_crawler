@@ -10,6 +10,10 @@ import logging
 logging.basicConfig(level = logging.INFO)
 
 # config in config.sh
+MONGO_USERNAME = os.environ["MONGO_USERNAME"]
+MONGO_PASSWORD = os.environ["MONGO_PASSWORD"]
+MONGO_HOST = os.environ["MONGO_HOST"]
+MONGO_PORT = int(os.environ["MONGO_PORT"])
 DATABASE = os.environ['DATABASE']
 COMPANY_COLECTION = os.environ['COMPANY_COLECTION']
 REVIEW_COLECTION = os.environ['REVIEW_COLECTION']
@@ -29,7 +33,8 @@ class UpdateCompany:
         self.new_reviews = data[1:]
         self.__process_raw_data()
 
-        with pymongo.MongoClient("mongodb://localhost:27017/") as client:
+        
+        with pymongo.MongoClient(host=MONGO_HOST, port=MONGO_PORT, username=MONGO_USERNAME, password=MONGO_PASSWORD, authSource=DATABASE, authMechanism='SCRAM-SHA-256') as client:
             self.__db = client[DATABASE]
             self.__company_collection = self.__db[COMPANY_COLECTION]
             self.__review_collection = self.__db[REVIEW_COLECTION]
