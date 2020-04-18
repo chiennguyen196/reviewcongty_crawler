@@ -9,7 +9,8 @@ class GetAllCompaniesSpider(scrapy.Spider):
 
     def start_requests(self):
         n_pages = int(getattr(self, 'n_pages', 367))
-        for i in range(1, n_pages + 1):
+        start_page = int(getattr(self, 'start_page', 1))
+        for i in range(start_page, n_pages + 1):
             url = f"https://reviewcongty.com/?tab=latest&page={i}"
             yield scrapy.Request(url=url)
 
