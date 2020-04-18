@@ -26,6 +26,7 @@ class Company(scrapy.Item):
     address = scrapy.Field()
 
 class Review(scrapy.Item):
+    review_id = scrapy.Field()
     name = scrapy.Field()
     position = scrapy.Field()
     rating = scrapy.Field()

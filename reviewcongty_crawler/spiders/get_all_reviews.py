@@ -73,6 +73,9 @@ class GetAllReviewsSpider(scrapy.Spider):
             yield self.parse_one_review(selector)
 
     def parse_one_review(self, selector):
+
+        review_id = selector.xpath('./header/a[@class="review__share"]/@href').get().split('/')[-1]
+
         header_text = selector.xpath("./header/p/text()").get().strip()
 
         first_parentheses_position = header_text.find('(')
@@ -97,6 +100,7 @@ class GetAllReviewsSpider(scrapy.Spider):
             replies.append(reply)
 
         return Review(
+            review_id=review_id,
             name=name,
             position=position,
             rating=rating,
