@@ -13,7 +13,7 @@ export IMAGE_DEST_FOLDER=/home/chiennm/images
 
 # INIT
 
-export START_PAGE=100
+export START_PAGE=128
 export MAX_PAGES=131
 
 # UPDATE
