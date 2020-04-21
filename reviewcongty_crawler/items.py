@@ -15,10 +15,10 @@ class ReviewcongtyCrawlerItem(scrapy.Item):
 
 
 class Company(scrapy.Item):
+    id = scrapy.Field()
     image_logo = scrapy.Field()
     name = scrapy.Field()
     url = scrapy.Field()
-    slug = scrapy.Field()
     rating = scrapy.Field()
     rating_count = scrapy.Field()
     company_type = scrapy.Field()

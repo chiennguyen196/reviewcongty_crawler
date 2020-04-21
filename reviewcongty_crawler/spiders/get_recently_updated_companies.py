@@ -13,6 +13,6 @@ class GetRecentlyUpdatedCompaniesSpider(scrapy.Spider):
         for review in review_list:
             company_url = review.xpath('./h3//a/@href').get()
             yield {
-                'slug': company_url.split('/')[-1],
+                'id': company_url.split('/')[-1],
                 'url': urllib.parse.urljoin('https://reviewcongty.com/', company_url)
             }

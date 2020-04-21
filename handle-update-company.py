@@ -1,7 +1,6 @@
 import json
 import sys
 import pymongo
-from bson.objectid import ObjectId
 import urllib.parse
 import requests
 import os
@@ -53,7 +52,7 @@ class UpdateCompany:
             r["created"] = datetime.datetime.strptime(r["created"] + "+0700", "%Y-%m-%d %H:%M:%S.%f%z")
     
     def __check_company_is_existed(self):
-        return self.__company_collection.count({'slug': self.new_company['slug']}, limit=1) != 0
+        return self.__company_collection.count({'_id': self.new_company['id']}, limit=1) != 0
 
     def __handle_new_company(self):
         self.__try_to_download_logo_image()
@@ -79,9 +78,9 @@ class UpdateCompany:
     def __insert_new_company(self):
         
         r = self.__company_collection.insert_one({
+            "_id": self.new_company["id"],
             "image_name": self.new_company["image_name"],
             "name": self.new_company["name"],
-            "slug": self.new_company["slug"],
             "rating": self.new_company["rating"],
             "rating_count": self.new_company["rating_count"],
             "company_type": self.new_company["company_type"],
@@ -92,7 +91,7 @@ class UpdateCompany:
         return r.inserted_id
 
     def __get_company_id(self):
-        company = self.__company_collection.find_one({'slug': self.new_company["slug"]})
+        company = self.__company_collection.find_one({'_id': self.new_company["id"]})
         return company["_id"]
 
     def __update_company(self):
@@ -100,7 +99,7 @@ class UpdateCompany:
         rating = self.new_company["rating"]
         rating_count = self.new_company["rating_count"]
         self.__company_collection.update_one(
-            {"_id": ObjectId(self.__company_id)},
+            {"_id": self.__company_id},
             {"$set": {
                 "last_updated": last_updated,
                 "rating": rating,
@@ -110,7 +109,7 @@ class UpdateCompany:
 
     def __delete_old_reviews(self):
         self.__review_collection.delete_many({
-            "company_id": ObjectId(self.__company_id),
+            "company_id": self.__company_id,
             "source": "crawler"
         })
 
@@ -119,9 +118,8 @@ class UpdateCompany:
         return last_updated
 
     def __insert_reviews(self):
-        company_id = ObjectId(self.__company_id)
         for r in self.new_reviews:
-            r["company_id"] = company_id
+            r["company_id"] = self.__company_id
             r["source"] = "crawler"
         self.__review_collection.insert_many(self.new_reviews)
 
