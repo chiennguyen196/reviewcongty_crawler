@@ -18,10 +18,10 @@ echo "[INFO] Got `wc -l $TEMP_FOLDER/recently.jl` companies"
 while IFS= read -r line
 do
     if [ ! -z "$line" ]; then
-        slug=$(echo "$line" | jq '.slug' -r)
+        id=$(echo "$line" | jq '.id' -r)
         url=$(echo "$line" | jq '.url' -r)
-        out_file=${TEMP_FOLDER}/${slug}.jl
-        echo "[INFO] Crawling reivews from $slug at $url"
+        out_file=${TEMP_FOLDER}/${id}.jl
+        echo "[INFO] Crawling reivews from $id at $url"
         scrapy crawl get-all-reviews -o $out_file -t 'jl' -a url=$url
         if [[ ! -s $out_file ]]; then
             echo "[WARNING]: Crawl review from $url fail"

@@ -27,7 +27,7 @@ class GetAllCompaniesSpider(scrapy.Spider):
         image_logo = company_selector.css('img::attr(src)').get()
         name = company_selector.css('h2.company-info__name a::text').get().strip()
         url = company_selector.css('h2.company-info__name a::attr(href)').get()
-        slug = url.split('/')[-1]
+        id = url.split('/')[-1]
         rating_selector = company_selector.css('h2.company-info__name span.company-info__rating span')[0]
         rating = self.parse_rating(rating_selector)
         rating_count = int(company_selector.css('h2.company-info__name span.company-info__rating span.company-info__rating-count::text').get()[1:-1])
@@ -38,7 +38,7 @@ class GetAllCompaniesSpider(scrapy.Spider):
             "image_logo": image_logo,
             "name": name,
             "url": urllib.parse.urljoin('https://reviewcongty.com/', url),
-            "slug": slug,
+            "id": id,
             "rating": rating,
             "rating_count": rating_count,
             "comapny_type": comapny_type,
