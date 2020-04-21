@@ -20,6 +20,12 @@ REVIEW_COLECTION = os.environ['REVIEW_COLECTION']
 BASE_URL = os.environ['BASE_URL']
 IMAGE_DEST_FOLDER = os.environ['IMAGE_DEST_FOLDER']
 
+SPAM_REPLIES = [
+    "Bác nói đúng vãi, tặng 1 like",
+    "Review nhảm nhí, dislike",
+    "Xóa review này giùm!"
+]
+
 def convert_string_to_date(time_str):
     return datetime.datetime.strptime(time_str + "+0700", "%Y-%m-%d %H:%M:%S%z")
 
@@ -54,6 +60,9 @@ class UpdateCompany:
         self.new_company['image_name'] = image_name
         for r in self.new_reviews:
             r["created"] = ObjectId(r["review_id"]).generation_time
+
+            r["replies"] = [rely for rely in r["replies"] if rely["content"] not in SPAM_REPLIES]
+
             for rely in r["replies"]:
                 rely["created"] = convert_string_to_date(rely["created"])
     
