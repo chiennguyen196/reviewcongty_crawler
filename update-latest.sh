@@ -12,7 +12,7 @@ set -e
 TEMP_FOLDER=$(mktemp -d)
 
 echo "[INFO] Getting recently updated companies"
-scrapy crawl get-recently-updated-companies -o $TEMP_FOLDER/recently.jl -t 'jl'
+scrapy crawl get-recently-updated-companies -o $TEMP_FOLDER/recently.jl -t 'jl' --nolog
 echo "[INFO] Got `wc -l $TEMP_FOLDER/recently.jl` companies"
 
 while IFS= read -r line
@@ -22,7 +22,7 @@ do
         url=$(echo "$line" | jq '.url' -r)
         out_file=${TEMP_FOLDER}/${id}.jl
         echo "[INFO] Crawling reivews from $id at $url"
-        scrapy crawl get-all-reviews -o $out_file -t 'jl' -a url=$url
+        scrapy crawl get-all-reviews -o $out_file -t 'jl' -a url=$url --nolog
         # remove duplicate if it has
         cat $out_file | awk '!x[$0]++' > ${out_file}-temp && mv ${out_file}-temp $out_file
         # check out_file is empty or not?
