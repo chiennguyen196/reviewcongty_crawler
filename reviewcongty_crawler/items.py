@@ -30,7 +30,7 @@ class Review(scrapy.Item):
     name = scrapy.Field()
     position = scrapy.Field()
     rating = scrapy.Field()
-    created = scrapy.Field(serializer=str)
+    created = scrapy.Field()
     content = scrapy.Field()
     num_likes = scrapy.Field()
     num_dislikes = scrapy.Field()

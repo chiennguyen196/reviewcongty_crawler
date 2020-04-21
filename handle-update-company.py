@@ -1,6 +1,7 @@
 import json
 import sys
 import pymongo
+from bson.objectid import ObjectId
 import urllib.parse
 import requests
 import os
@@ -18,6 +19,9 @@ COMPANY_COLECTION = os.environ['COMPANY_COLECTION']
 REVIEW_COLECTION = os.environ['REVIEW_COLECTION']
 BASE_URL = os.environ['BASE_URL']
 IMAGE_DEST_FOLDER = os.environ['IMAGE_DEST_FOLDER']
+
+def convert_string_to_date(time_str):
+    return datetime.datetime.strptime(time_str + "+0700", "%Y-%m-%d %H:%M:%S%z")
 
 class UpdateCompany:
     def __init__(self):
@@ -49,7 +53,9 @@ class UpdateCompany:
         image_name = os.path.basename(self.new_company["image_logo"])
         self.new_company['image_name'] = image_name
         for r in self.new_reviews:
-            r["created"] = datetime.datetime.strptime(r["created"] + "+0700", "%Y-%m-%d %H:%M:%S.%f%z")
+            r["created"] = ObjectId(r["review_id"]).generation_time
+            for rely in r["replies"]:
+                rely["created"] = convert_string_to_date(rely["created"])
     
     def __check_company_is_existed(self):
         return self.__company_collection.count({'_id': self.new_company['id']}, limit=1) != 0
