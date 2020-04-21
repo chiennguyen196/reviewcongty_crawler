@@ -69,6 +69,7 @@ class UpdateCompany:
         image_url = urllib.parse.urljoin(BASE_URL, self.new_company["image_logo"])
         dest_image = os.path.join(IMAGE_DEST_FOLDER, self.new_company['image_name'])
         try:
+            logging.info("Trying to download image from {}".format(image_url))
             r = requests.get(image_url)
             with open(dest_image, 'wb') as f:
                 f.write(r.content)
