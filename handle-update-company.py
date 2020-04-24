@@ -62,9 +62,10 @@ class UpdateCompany:
             r["created"] = ObjectId(r["review_id"]).generation_time
 
             r["replies"] = [rely for rely in r["replies"] if rely["content"] not in SPAM_REPLIES]
-
             for rely in r["replies"]:
                 rely["created"] = convert_string_to_date(rely["created"])
+
+            r["company_name"] = self.new_company["name"]
     
     def __check_company_is_existed(self):
         return self.__company_collection.count({'_id': self.new_company['id']}, limit=1) != 0

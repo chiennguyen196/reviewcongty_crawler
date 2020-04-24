@@ -3,7 +3,7 @@
 #       crawl_all_reviews -> hanle_update_company
 
 # exit when any command fails
-set -e
+# set -e
 
 . ./path.sh
 . ./config.sh
