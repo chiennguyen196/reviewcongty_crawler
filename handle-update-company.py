@@ -145,7 +145,7 @@ if __name__ == "__main__":
     company_file = sys.argv[1]
 
     logging.info("Reading company info and review from file")
-    with open(company_file, 'r') as f:
+    with open(company_file, 'r', encoding="utf-8") as f:
         lines = [json.loads(l) for l in f.readlines()]
 
     update_company = UpdateCompany()
