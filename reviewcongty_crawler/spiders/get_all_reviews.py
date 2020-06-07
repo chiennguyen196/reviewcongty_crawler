@@ -116,12 +116,23 @@ class GetAllReviewsSpider(scrapy.Spider):
     def get_reply(self, reply_selector):
         created = "".join(reply_selector.xpath('./p[@class="comment__title"]/text()').getall()).strip()
         created = get_time(created)
-        name = reply_selector.xpath('./p[@class="comment__title"]/span/text()').get().replace("đề nghị xóa", "").replace("đã", "").replace("❌", "").strip()
+        raw_name = reply_selector.xpath('./p[@class="comment__title"]/span/text()').get()
+        name = raw_name.replace("đề nghị xóa", "").replace("đã", "").replace("❌", "").strip()
         content = reply_selector.xpath('./p[@class="comment__content text-500"]/text()').get()
+
+        reaction = None
+        if reply_selector.xpath('./p[@class="comment__title"]/span/span[@class="icon-like icon has-text-success"]'):
+            reaction = 'LIKE'
+        if reply_selector.xpath('./p[@class="comment__title"]/span/span[@class="icon-dislike icon has-text-danger"]'):
+            reaction = 'DISLIKE'
+        if 'đề nghị xóa' in raw_name:
+            reaction = 'SHOULD_DELETE'
+
         return {
             "name": name,
             "content": content,
-            "created": created
+            "created": created,
+            "reaction": reaction
         }
         
     
