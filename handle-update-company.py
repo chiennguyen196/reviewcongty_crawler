@@ -78,7 +78,6 @@ class UpdateCompany:
     def __handle_old_company(self):
         self.__company_id = self.__get_company_id()
         self.__update_company()
-        self.__delete_old_reviews()
         self.__insert_reviews()
     
     def __try_to_download_logo_image(self):
@@ -124,12 +123,6 @@ class UpdateCompany:
             }}
         )
 
-    def __delete_old_reviews(self):
-        self.__review_collection.delete_many({
-            "company_id": self.__company_id,
-            "source": "crawler"
-        })
-
     def __get_last_updated(self):
         last_updated = max([r["created"] for r in self.new_reviews])
         return last_updated
@@ -138,8 +131,10 @@ class UpdateCompany:
         for r in self.new_reviews:
             r["company_id"] = self.__company_id
             r["source"] = "crawler"
-        self.__review_collection.insert_many(self.new_reviews)
-
+        
+        for r in self.new_reviews:
+            self.__review_collection.update_one({'review_id': r['review_id']}, { "$set": r}, upsert=True)
+        
 
 if __name__ == "__main__":
     company_file = sys.argv[1]
